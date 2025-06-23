@@ -1,25 +1,33 @@
 {% extends "layout.html" %}
 {% block content %}
-<h2>Gmail Auto Scan</h2>
-<div id="results"></div>
-<script>
-async function refreshScan(){
-  const res=await fetch('/scan_data');
-  if(!res.ok)return;
-  const data=await res.json();
-  let html=`<p>Scanned ${data.total_scanned} ${data.total_scanned===1?'email':'emails'}. <strong>${data.flagged_count} flagged</strong>.</p>`;
-  if(data.flagged_count>0){
-    html+='<h3>Flagged Emails</h3><ul>';
-    data.flagged.forEach(e=>{
-      html+=`<li style="margin-bottom:1em;"><p><strong>Subject:</strong> ${e.subject}</p><p><strong>Body preview:</strong> ${e.body_preview}</p><p><strong>Flagged by:</strong> ${e.model} (${e.prob})</p></li>`;
-    });
-    html+='</ul>';
-  } else {
-    html+='<p>No suspicious emails found.</p>';
-  }
-  document.getElementById('results').innerHTML=html;
-}
-refreshScan();
-setInterval(refreshScan,60000);
-</script>
+  <div class="bg-white shadow rounded-lg p-6">
+    <h2 class="text-2xl font-semibold text-pink-600 mb-4">Gmail Auto Scan</h2>
+    <div id="results" class="text-gray-800"></div>
+  </div>
+
+  <script>
+    async function refreshScan(){
+      const res = await fetch('/scan_data');
+      if (!res.ok) return;
+      const data = await res.json();
+      let html = `<p>Scanned <strong>${data.total_scanned}</strong> ${data.total_scanned === 1 ? 'email' : 'emails'}. <span class="text-pink-600 font-semibold">${data.flagged_count} flagged</span>.</p>`;
+      if(data.flagged_count > 0){
+        html += '<h3 class="mt-4 font-semibold text-lg">Flagged Emails</h3><ul class="mt-2 space-y-4">';
+        data.flagged.forEach(e => {
+          html += `<li class="bg-red-100 p-4 rounded-lg border-l-4 border-red-400">
+                    <p><strong>Subject:</strong> ${e.subject}</p>
+                    <p><strong>Body preview:</strong> ${e.body_preview}</p>
+                    <p><strong>Flagged by:</strong> ${e.model} (${e.prob})</p>
+                   </li>`;
+        });
+        html += '</ul>';
+      } else {
+        html += '<p class="mt-4 text-green-700">No suspicious emails found.</p>';
+      }
+      document.getElementById('results').innerHTML = html;
+    }
+
+    refreshScan();
+    setInterval(refreshScan, 60000);
+  </script>
 {% endblock %}

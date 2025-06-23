@@ -1,19 +1,47 @@
 {% extends "layout.html" %}
 {% block content %}
-  <h2>Manual Email Check</h2>
-  <form method="post">
-    <textarea name="email_text" rows="10" cols="60" placeholder="Paste full email text here..."></textarea><br/>
-    <button type="submit">Check</button>
-  </form>
+  <div class="bg-white shadow rounded-lg p-6">
+    <h2 class="text-2xl font-semibold text-pink-600 mb-4">Manual Email Check</h2>
+    <form method="post" class="space-y-4">
+      <textarea name="email_text" rows="10" placeholder="Paste full email text here..."
+        class="w-full border border-pink-300 p-3 rounded-md resize-none focus:ring-2 focus:ring-pink-300 outline-none"></textarea>
+      <button type="submit"
+        class="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-6 rounded shadow">
+        Check
+      </button>
+    </form>
+  </div>
 
   {% if results %}
-    <h3>Model Certainties</h3>
-    <ul>
-      {% for r in results %}
-        <li><strong>{{ r.model }}</strong>: {{ r.prob }}</li>
-      {% endfor %}
-    </ul>
-    <p><strong>Average Certainty:</strong> {{ average }}</p>
-    <p><strong>Final Verdict:</strong> {{ verdict }}</p>
+    <div class="mt-8">
+      <h3 class="text-xl font-semibold text-gray-800 mb-4">Model Certainties</h3>
+      <ul class="space-y-4">
+        {% for r in results %}
+          <li>
+            <p class="mb-1"><strong>{{ r.model }}</strong>: {{ r.prob }}</p>
+            <div class="w-full bg-pink-100 rounded-full h-4">
+              <div class="bg-pink-500 h-4 rounded-full text-xs text-white text-center"
+                   style="width: {{ r.prob }};">
+                {{ r.prob }}
+              </div>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="mt-8">
+      {% if verdict == 'Phishing' %}
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-5 rounded-lg">
+          <h4 class="font-bold text-lg mb-2">⚠️ Phishing Detected</h4>
+          <p><strong>Average Certainty:</strong> {{ average }}</p>
+        </div>
+      {% else %}
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-5 rounded-lg">
+          <h4 class="font-bold text-lg mb-2">✅ Legitimate Email</h4>
+          <p><strong>Average Certainty:</strong> {{ average }}</p>
+        </div>
+      {% endif %}
+    </div>
   {% endif %}
 {% endblock %}
