@@ -1,10 +1,12 @@
 import os
+import json
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import FeatureUnion, Pipeline
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, accuracy_score
+import joblib
 from feature_extraction import SuspiciousFeatures
 
 os.makedirs('models', exist_ok=True)
@@ -52,6 +54,11 @@ for fname in os.listdir(data_dir):
     acc = accuracy_score(y_test, y_pred)
     print(f"[{dataset_name}] Accuracy: {acc:.4f}")
     print(classification_report(y_test, y_pred, target_names=['legit','phish']))
+
+    setattr(pipeline, 'accuracy', acc)
+    model_path = f"models/model_{dataset_name}.pkl"
+    joblib.dump(pipeline, model_path)
+    print(f"[{dataset_name}] Saved the model to {model_path}")
 
 print("\n====================")
 print("Training completed.")
