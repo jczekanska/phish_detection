@@ -32,6 +32,13 @@ A Flask-based phishing email detection utility that supports manual email checks
    ```bash
    pip install -r requirements.txt
    ```
+4. **Obtain Google API credentials**
+- Go to `Google Cloud Console -> APIs & Services` and create a project.
+- Enable `Gmail API` for that project.
+- In `APIs & Services -> OAuth consent screen` select `External` as the user type and configure the screen, then add a test user.
+- In `APIs & Services -> Credentials` click `Create Credentials -> OAuth client ID -> Web application`.
+- Set `Authorized redirect URI` to `http://localhost:5000/oauth2callback`
+- Download the JSON and save it as `credentials.json` in the project root.
 4. **Run the app**
 
    ```bash
