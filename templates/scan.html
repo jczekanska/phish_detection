@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Gmail Auto Scan</h2>
+<div id="results"></div>
+<script>
+async function refreshScan(){
+  const res=await fetch('/scan_data');
+  if(!res.ok)return;
+  const data=await res.json();
+  let html=`<p>Scanned ${data.total_scanned} ${data.total_scanned===1?'email':'emails'}. <strong>${data.flagged_count} flagged</strong>.</p>`;
+  if(data.flagged_count>0){
+    html+='<h3>Flagged Emails</h3><ul>';
+    data.flagged.forEach(e=>{
+      html+=`<li style="margin-bottom:1em;"><p><strong>Subject:</strong> ${e.subject}</p><p><strong>Body preview:</strong> ${e.body_preview}</p><p><strong>Flagged by:</strong> ${e.model} (${e.prob})</p></li>`;
+    });
+    html+='</ul>';
+  } else {
+    html+='<p>No suspicious emails found.</p>';
+  }
+  document.getElementById('results').innerHTML=html;
+}
+refreshScan();
+setInterval(refreshScan,60000);
+</script>
+{% endblock %}

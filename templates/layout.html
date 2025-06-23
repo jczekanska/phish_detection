@@ -8,7 +8,11 @@
 <body>
   <nav class="tab">
     <a href="{{ url_for('index') }}">Manual Input</a> |
-    <a href="{{ url_for('login') }}">Auto Gmail Scan</a>
+    {% if token_exists %}
+    <a href="{{ url_for('scan') }}">Auto Gmail Scan</a>
+    {% else %}
+    <a href="{{ url_for('login') }}">Connect Gmail</a>
+    {% endif %}
   </nav>
   {% block content %}{% endblock %}
 </body>

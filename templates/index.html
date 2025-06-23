@@ -13,10 +13,6 @@
         <li><strong>{{ r.model }}</strong>: {{ r.prob }}</li>
       {% endfor %}
     </ul>
-  {% endif %}
-
-  {% if average %}
-    <hr>
     <p><strong>Average Certainty:</strong> {{ average }}</p>
     <p><strong>Final Verdict:</strong> {{ verdict }}</p>
   {% endif %}

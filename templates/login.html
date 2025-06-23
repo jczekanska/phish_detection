@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block content %}
+  <h2>Gmail Auto Scan</h2>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for msg in messages %}<p style="color:orange;">{{ msg }}</p>{% endfor %}
+    {% endif %}
+  {% endwith %}
+  {% if flagged %}
+    <h3>Flagged Emails</h3>
+    <ul>
+      {% for email in flagged %}
+        <li>
+          <strong>{{ email.snippet }}</strong><br/>
+          Flagged by <em>{{ email.model }}</em> (Certainty: {{ email.prob }})
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No suspicious unread emails found.</p>
+  {% endif %}
+{% endblock %}
