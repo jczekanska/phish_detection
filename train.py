@@ -5,21 +5,23 @@ from sklearn.pipeline import FeatureUnion, Pipeline
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, accuracy_score
-import joblib
 from feature_extraction import SuspiciousFeatures
 
-datasets = {
-    'CEAS_08': 'data/CEAS_08.csv',
-    'Phishing_Legitimate_full': 'data/Phishing_Legitimate_full.csv'
-}
+os.makedirs('models', exist_ok=True)
+metadata = {}
 
-results = {}
-
-for name, path in datasets.items():
+data_dir = 'data'
+for fname in os.listdir(data_dir):
+    if not fname.lower().endswith('.csv'):
+        continue
+    dataset_name = os.path.splitext(fname)[0]
+    path = os.path.join(data_dir, fname)
     print(f"\n====================")
-    print(f"[{name}] Training model")
+    print(f"[{dataset_name}] Training model")
+
     df = pd.read_csv(path)
-    if name == 'CEAS_08':
+
+    if {'body', 'label'}.issubset(df.columns):
         X = df['body']
         y = df['label']
         pipeline = Pipeline([
@@ -29,13 +31,16 @@ for name, path in datasets.items():
             ])),
             ('clf', RandomForestClassifier(n_estimators=100, random_state=42))
         ])
-    else:
-        feature_cols = [col for col in df.columns if col not in ('id', 'CLASS_LABEL')]
+    elif 'CLASS_LABEL' in df.columns:
+        feature_cols = [c for c in df.columns if c not in ('id', 'CLASS_LABEL')]
         X = df[feature_cols]
         y = df['CLASS_LABEL']
         pipeline = Pipeline([
             ('clf', RandomForestClassifier(n_estimators=100, random_state=42))
         ])
+    else:
+        print(f"[{dataset_name }] Skipping the dataset: unrecognized columns {df.columns.tolist()}")
+        continue
 
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=42, stratify=y
@@ -45,18 +50,8 @@ for name, path in datasets.items():
 
     y_pred = pipeline.predict(X_test)
     acc = accuracy_score(y_test, y_pred)
-    report = classification_report(y_test, y_pred, target_names=['legit', 'phish'])
-    print(f"[{name}] Accuracy: {acc:.4f}")
-    print(report)
+    print(f"[{dataset_name}] Accuracy: {acc:.4f}")
+    print(classification_report(y_test, y_pred, target_names=['legit','phish']))
 
-    results[name] = acc
-    os.makedirs('models', exist_ok=True)
-    model_file = f"models/model_{name}.pkl"
-    joblib.dump(pipeline, model_file)
-    print(f"[{name}] Model saved to {model_file}")
-
-
-print(f"\n====================")
-print("Summary:")
-for name, acc in results.items():
-    print(f" - {name}: {acc:.4f}")
+print("\n====================")
+print("Training completed.")
