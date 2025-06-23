@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block content %}
+  <h2>Manual Email Check</h2>
+  <form method="post">
+    <textarea name="email_text" rows="10" cols="60" placeholder="Paste full email text here..."></textarea><br/>
+    <button type="submit">Check</button>
+  </form>
+
+  {% if results %}
+    <h3>Model Certainties</h3>
+    <ul>
+      {% for r in results %}
+        <li><strong>{{ r.model }}</strong>: {{ r.prob }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if average %}
+    <hr>
+    <p><strong>Average Certainty:</strong> {{ average }}</p>
+    <p><strong>Final Verdict:</strong> {{ verdict }}</p>
+  {% endif %}
+{% endblock %}

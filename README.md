@@ -12,13 +12,37 @@ A Flask-based phishing email detection utility that supports manual email checks
 
 ## Dataset Providers
 
-* **CEAS 2008 Phishing Email Dataset** (via Kaggle): [https://www.kaggle.com/datasets/naserabdullahalam/phishing-email-dataset?resource=download](https://www.kaggle.com/datasets/naserabdullahalam/phishing-email-dataset?resource=download)
-
-* **Phishing-Legitimate Full Dataset** (via Kaggle): [https://www.kaggle.com/datasets/shashwatwork/phishing-dataset-for-machine-learning?fbclid=IwY2xjawLEOJNleHRuA2FlbQIxMQABHrDlEvwxKd\_PjuSl5BoVXEYC75txL7HCupPeikC6QcPlX05GB0sI9gUImZZL\_aem\_uN8LZVAH6Uauv0MQOIeSHA](https://www.kaggle.com/datasets/shashwatwork/phishing-dataset-for-machine-learning?fbclid=IwY2xjawLEOJNleHRuA2FlbQIxMQABHrDlEvwxKd_PjuSl5BoVXEYC75txL7HCupPeikC6QcPlX05GB0sI9gUImZZL_aem_uN8LZVAH6Uauv0MQOIeSHA)
+  * **[CEAS 2008 Phishing Email Dataset (via Kaggle)](https://www.kaggle.com/datasets/naserabdullahalam/phishing-email-dataset?resource=download)**
 
 ## Quick Start (Ubuntu)
 
-**TBA**
+1. **Enter the project**
+
+   ```bash
+   cd phish_detect_app
+   ```
+2. **Create virtual environment**
+
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
+3. **Install dependencies**
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. **Run the app**
+
+   ```bash
+   export FLASK_APP=app.py
+   flask run
+   ```
+5. **Access UI** at `http://localhost:5000`
+
+## Additional
+
+Users may input their own CSV datasets into the `data/` directory and create models that can be used by the app as long as the file can be parsed by `train.py`. If so, running that file provides the user with a ready-to-use model in `models/` directory.
 
 ## License
 
