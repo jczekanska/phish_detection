@@ -1,7 +1,5 @@
 # Phish Detect App
 
-## IN PROGRESS
-
 A Flask-based phishing email detection utility that supports manual email checks and automatic Gmail scanning. Train and compare models on two public datasets.
 
 ## Features
