@@ -19,7 +19,7 @@ A Flask-based phishing email detection utility that supports manual email checks
 1. **Enter the project**
 
    ```bash
-   cd phish_detect_app
+   cd phish_detection
    ```
 2. **Create virtual environment**
 
@@ -30,7 +30,7 @@ A Flask-based phishing email detection utility that supports manual email checks
 3. **Install dependencies**
 
    ```bash
-   pip install -r requirements.txt
+   pip3 install -r requirements.txt
    ```
 4. **Obtain Google API credentials**
 - Go to `Google Cloud Console -> APIs & Services` and create a project.
